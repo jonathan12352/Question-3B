@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmqconsumer
+spec:
+  selector:
+    matchLabels:
+      app: rabbitmqconsumer
+  template:
+    metadata:
+      labels:
+        app: rabbitmqconsumer
+    spec:
+      containers:
+        - name: rabbitmqconsumer
+          image: jonathan12352/msassessmentrabbitconsumer:1.0.0
+          env:
+            - name: RABBITMQ_HOST
+              value: "rabbitmq"
+            - name: RABBITMQ_PORT
+              value: "5672"
+
+---
+# Service Exposes your Deployments Externally
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmqconsumer
+spec:
+  type: NodePort
+  selector:
+    app: rabbitmqconsumer
+  ports:
+    - port: 80
+      targetPort: 5000
+      nodePort: 31289
